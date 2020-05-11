@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-demo
+  template:
+    metadata:
+      labels:
+        app: web-demo
+    spec:
+      containers:
+      - name: java-webapp
+        image: <Registry>/java-webapp:1.0
+        ports:
+        - name: web-port
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /
+            port: web-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: web-port
+          initialDelaySeconds: 15
+          timeoutSeconds: 30
